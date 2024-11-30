@@ -1,6 +1,7 @@
 import { Box, MenuItem, Select, TextField } from "@mui/material";
 import { LocationsFilter } from "types/location";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useEffect, useRef } from "react";
+import { useDebounce } from "hooks/useDebounce";
 
 interface SearchBarProps {
   onFilterChange: (filter: Partial<LocationsFilter>) => void;
@@ -14,15 +15,22 @@ const SearchBar = ({
   onViewTypeChange,
 }: SearchBarProps) => {
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 500);
+  const prevSearch = useRef(debouncedSearch);
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearch(value);
-    onFilterChange({
-      locationName: value || undefined,
-      robotId: value || undefined,
-    });
+    setSearch(e.target.value);
   };
+
+  useEffect(() => {
+    if (prevSearch.current !== debouncedSearch) {
+      onFilterChange({
+        locationName: debouncedSearch || undefined,
+        robotId: debouncedSearch || undefined,
+      });
+      prevSearch.current = debouncedSearch;
+    }
+  }, [debouncedSearch, onFilterChange]);
 
   return (
     <Box sx={{ display: "flex", gap: 2 }}>
