@@ -1,22 +1,23 @@
 export interface Robot {
   id: string;
-  is_online: boolean;
+  isOnline: boolean;
 }
 
 export interface Location {
   id: number;
   name: string;
   robot: Robot;
+  star: boolean; // Added star property
 }
 
 export interface LocationsResult {
-  total_count: number;
+  totalCount: number;
   locations: Location[];
 }
 
 export interface LocationsFilter {
   page: number;
-  location_name?: string;
-  robot_id?: string;
-  is_starred?: boolean;
+  locationName?: string;
+  robotId?: string;
+  isStarred?: boolean;
 }

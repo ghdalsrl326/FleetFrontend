@@ -1,15 +1,15 @@
 import { Box, Container, Typography, Alert, Snackbar } from "@mui/material";
 import LocationsTable from "components/FleetDashboard/LocationsTable";
 import SearchBar from "components/FleetDashboard/SearchBar";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { LocationsFilter } from "types/location";
 
 const FleetDashboard = () => {
   const [filter, setFilter] = useState<LocationsFilter>({
     page: 0,
-    location_name: "",
-    robot_id: "",
-    is_starred: false,
+    locationName: "",
+    robotId: "",
+    isStarred: false,
   });
 
   const [viewType, setViewType] = useState<"all" | "starred">("all");
@@ -22,13 +22,13 @@ const FleetDashboard = () => {
     }));
   };
 
-  const currentFilter = useMemo(
-    () => ({
-      ...filter,
-      is_starred: viewType === "starred",
-    }),
-    [filter, viewType],
-  );
+  const handleViewTypeChange = (newViewType: "all" | "starred") => {
+    setViewType(newViewType);
+    setFilter((prev) => ({
+      ...prev,
+      isStarred: newViewType === "starred",
+    }));
+  };
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -39,13 +39,10 @@ const FleetDashboard = () => {
         <SearchBar
           onFilterChange={handleFilterChange}
           viewType={viewType}
-          onViewTypeChange={setViewType}
+          onViewTypeChange={handleViewTypeChange}
         />
       </Box>
-      <LocationsTable
-        filter={currentFilter}
-        onFilterChange={handleFilterChange}
-      />
+      <LocationsTable filter={filter} onFilterChange={handleFilterChange} />
       <Snackbar
         open={!!error}
         autoHideDuration={6000}
