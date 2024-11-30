@@ -21,7 +21,7 @@ export const handlers = [
           (locationName
             ? location.name.toLowerCase().includes(locationName.toLowerCase())
             : false) ||
-          (robotId
+          (robotId && location.robot
             ? location.robot.id.toLowerCase().includes(robotId.toLowerCase())
             : false),
       );

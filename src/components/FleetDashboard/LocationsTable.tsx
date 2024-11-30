@@ -1,4 +1,4 @@
-import { Box, Button, IconButton } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -94,6 +94,10 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
     </Box>
   );
 
+  const handleAddRobot = (locationId: number) => {
+    console.log(`Add robot to location ${locationId}`);
+  };
+
   const columns = [
     {
       field: "starred",
@@ -137,19 +141,71 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
       field: "robot",
       headerName: "Robots",
       flex: 1,
-      renderCell: (params: any) => (
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <FiberManualRecordIcon
+      renderCell: (params: any) => {
+        if (!params.value) {
+          return (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                height: "100%",
+              }}
+            >
+              <FiberManualRecordIcon
+                sx={{
+                  color: theme.palette.grey[500],
+                  fontSize: theme.typography.subtitle1.fontSize,
+                }}
+              />
+              <Typography
+                component="span"
+                sx={{
+                  cursor: "pointer",
+                  color: theme.palette.primary.main,
+                  font: theme.typography.subtitle2,
+                  textDecoration: "underline",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                onClick={() => handleAddRobot(params.row.id)}
+              >
+                Add
+              </Typography>
+            </Box>
+          );
+        }
+
+        return (
+          <Box
             sx={{
-              color: params.value.isOnline
-                ? theme.palette.success.main
-                : theme.palette.grey[500],
-              font: theme.typography.subtitle1,
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              height: "100%",
             }}
-          />
-          {params.value.id}
-        </Box>
-      ),
+          >
+            <FiberManualRecordIcon
+              sx={{
+                fontSize: theme.typography.body1,
+                color: params.value.isOnline
+                  ? theme.palette.success.main
+                  : theme.palette.grey[500],
+              }}
+            />
+            <Typography
+              sx={{
+                ...theme.typography.subtitle2,
+                color: params.value.isOnline
+                  ? theme.palette.grey[900]
+                  : theme.palette.grey[500],
+              }}
+            >
+              {params.value.id}
+            </Typography>
+          </Box>
+        );
+      },
     },
   ];
 

@@ -26,10 +26,14 @@ export const locations: Location[] = Array.from(
   (_, index) => ({
     id: index,
     name: `${adjectives[index % adjectives.length]} ${nouns[index % nouns.length]} ${index.toString().padStart(3, "0")}`,
-    robot: {
-      id: `robot${index.toString().padStart(3, "0")}`,
-      isOnline: index % 2 === 0,
-    },
+    robot:
+      index % 4 === 0
+        ? undefined
+        : {
+            // Make some locations have no robot
+            id: `robot${index.toString().padStart(3, "0")}`,
+            isOnline: index % 2 === 0,
+          },
     star: index % 3 === 0,
   }),
 );

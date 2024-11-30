@@ -6,7 +6,7 @@ export interface Robot {
 export interface Location {
   id: number;
   name: string;
-  robot: Robot;
+  robot?: Robot; // Make robot optional
   star: boolean;
 }
 
