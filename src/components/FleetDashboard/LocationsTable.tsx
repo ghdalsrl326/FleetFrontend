@@ -3,7 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 import { Location, LocationsFilter } from "types/location";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import {
   fetchLocations,
@@ -21,7 +21,7 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
   const [starredIds, setStarredIds] = useState<number[]>([]);
   const [totalCount, setTotalCount] = useState(0);
 
-  const loadLocations = async () => {
+  const loadLocations = useCallback(async () => {
     try {
       const data = await fetchLocations(filter);
       setLocations(data.locations);
@@ -29,21 +29,21 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
     } catch (error) {
       console.error("Failed to fetch locations:", error);
     }
-  };
+  }, [filter]);
 
-  const loadStarredIds = async () => {
+  const loadStarredIds = useCallback(async () => {
     try {
       const data = await fetchStarredLocationIds();
       setStarredIds(data.locationIds);
     } catch (error) {
       console.error("Failed to fetch starred location ids:", error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadStarredIds();
     loadLocations();
-  }, [filter]);
+  }, [loadStarredIds, loadLocations]);
 
   const handleStarClick = async (locationId: number) => {
     const newStarredIds = starredIds.includes(locationId)
@@ -68,7 +68,7 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
 
   useEffect(() => {
     loadLocations();
-  }, [filter, paginationModel]);
+  }, [loadLocations, paginationModel]);
 
   const handlePaginationModelChange = (newModel: any) => {
     setPaginationModel(newModel);

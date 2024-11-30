@@ -7,7 +7,7 @@ export interface Location {
   id: number;
   name: string;
   robot: Robot;
-  star: boolean; // Added star property
+  star: boolean;
 }
 
 export interface LocationsResult {
@@ -19,7 +19,7 @@ export interface LocationsResult {
 
 export interface LocationsFilter {
   page: number;
-  locationName?: string;
-  robotId?: string;
-  isStarred?: boolean;
+  locationName: string;
+  robotId: string;
+  isStarred: boolean;
 }
