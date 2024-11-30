@@ -1,5 +1,5 @@
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-import FleetDashboard from "./components/FleetDashboard";
+import FleetDashboard from "components/FleetDashboard";
 
 const theme = createTheme();
 

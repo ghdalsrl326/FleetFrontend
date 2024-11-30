@@ -1,8 +1,8 @@
 import { Box, Container, Typography, Alert, Snackbar } from "@mui/material";
-import LocationsTable from "./LocationsTable";
-import SearchBar from "./SearchBar";
-import { useState } from "react";
-import { LocationsFilter } from "../../types/location";
+import LocationsTable from "components/FleetDashboard/LocationsTable";
+import SearchBar from "components/FleetDashboard/SearchBar";
+import { useState, useMemo } from "react";
+import { LocationsFilter } from "types/location";
 
 const FleetDashboard = () => {
   const [filter, setFilter] = useState<LocationsFilter>({
@@ -19,9 +19,16 @@ const FleetDashboard = () => {
     setFilter((prevFilter) => ({
       ...prevFilter,
       ...newFilter,
-      is_starred: viewType === "starred",
     }));
   };
+
+  const currentFilter = useMemo(
+    () => ({
+      ...filter,
+      is_starred: viewType === "starred",
+    }),
+    [filter, viewType],
+  );
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -31,14 +38,13 @@ const FleetDashboard = () => {
       <Box sx={{ mb: 3 }}>
         <SearchBar
           onFilterChange={handleFilterChange}
-          // onViewTypeChange={setViewType}
-          // viewType={viewType}
+          viewType={viewType}
+          onViewTypeChange={setViewType}
         />
       </Box>
       <LocationsTable
-        filter={filter}
+        filter={currentFilter}
         onFilterChange={handleFilterChange}
-        // onError={setError}
       />
       <Snackbar
         open={!!error}

@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+import App from "App";
+import reportWebVitals from "reportWebVitals";
 import { SetupWorkerApi } from "msw/browser";
 
 if (process.env.NODE_ENV === "development") {
-  const { worker }: { worker: SetupWorkerApi } = require("./mocks/browser");
+  const { worker }: { worker: SetupWorkerApi } = require("mocks/browser");
   worker.start({ onUnhandledRequest: "bypass" });
 }
 
