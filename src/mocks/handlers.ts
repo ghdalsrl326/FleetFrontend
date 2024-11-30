@@ -56,7 +56,6 @@ export const handlers = [
   }),
 
   http.put("/starred_location_ids", async ({ request }) => {
-    // Simulate random failures (30% chance)
     if (Math.random() < 0.3) {
       return HttpResponse.json(
         { error: "Simulated server error" },

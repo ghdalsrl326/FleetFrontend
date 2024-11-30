@@ -6,7 +6,6 @@ import { worker } from "mocks/browser";
 
 async function startApp() {
   if (process.env.NODE_ENV === "development") {
-    // Wait for the worker to be ready
     await worker.start({ onUnhandledRequest: "bypass" });
   }
 

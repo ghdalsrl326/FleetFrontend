@@ -228,7 +228,6 @@ export const theme = createTheme({
   },
 });
 
-// Add this to get TypeScript support for the custom color
 declare module "@mui/material/styles" {
   interface Palette {
     notice: Palette["primary"];
@@ -238,7 +237,6 @@ declare module "@mui/material/styles" {
   }
 }
 
-// Extend Typography variants
 declare module "@mui/material/styles" {
   interface TypographyVariants {
     h7: React.CSSProperties;

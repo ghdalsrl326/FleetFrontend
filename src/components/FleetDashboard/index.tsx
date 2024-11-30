@@ -1,5 +1,5 @@
 import { Box, Container, Typography, Alert, Snackbar } from "@mui/material";
-import LocationsTable from "components/FleetDashboard/LocationsTable";
+import LocationsTable from "components/FleetDashboard/LocationsTable/index";
 import SearchBar from "components/FleetDashboard/SearchBar";
 import { useState } from "react";
 import { LocationsFilter } from "types/location";

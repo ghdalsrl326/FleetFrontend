@@ -30,7 +30,6 @@ export const locations: Location[] = Array.from(
       index % 4 === 0
         ? undefined
         : {
-            // Make some locations have no robot
             id: `robot${index.toString().padStart(3, "0")}`,
             isOnline: index % 2 === 0,
           },
