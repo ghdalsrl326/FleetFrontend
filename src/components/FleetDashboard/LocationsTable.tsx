@@ -61,6 +61,20 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
     }
   };
 
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 6,
+  });
+
+  useEffect(() => {
+    loadLocations();
+  }, [filter, paginationModel]);
+
+  const handlePaginationModelChange = (newModel: any) => {
+    setPaginationModel(newModel);
+    onFilterChange({ page: newModel.page });
+  };
+
   const columns = [
     {
       field: "starred",
@@ -100,12 +114,11 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
       rows={locations}
       columns={columns}
       pagination
-      paginationModel={{
-        page: filter.page,
-        pageSize: 6,
-      }}
-      onPaginationModelChange={(model) => onFilterChange(model)}
+      paginationModel={paginationModel}
+      onPaginationModelChange={handlePaginationModelChange}
+      pageSizeOptions={[6]}
       rowCount={totalCount}
+      paginationMode="server"
       checkboxSelection
       disableRowSelectionOnClick
     />

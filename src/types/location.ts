@@ -13,6 +13,8 @@ export interface Location {
 export interface LocationsResult {
   totalCount: number;
   locations: Location[];
+  pageSize: number;
+  page: number;
 }
 
 export interface LocationsFilter {
