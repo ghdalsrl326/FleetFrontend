@@ -1,7 +1,7 @@
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import { theme } from "./theme/theme";
 import FleetDashboard from "components/FleetDashboard";
-
-const theme = createTheme();
 
 function App() {
   return (

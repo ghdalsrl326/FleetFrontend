@@ -2,6 +2,7 @@ import { Box, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import { Location, LocationsFilter } from "types/location";
 import { useEffect, useState, useCallback } from "react";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
@@ -75,11 +76,28 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
     onFilterChange({ page: newModel.page });
   };
 
+  const StarColumnHeader = () => (
+    <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+      <IconButton
+        size="small"
+        onClick={() => {
+          loadStarredIds();
+          loadLocations();
+        }}
+      >
+        <RefreshIcon fontSize="small" />
+      </IconButton>
+    </Box>
+  );
+
   const columns = [
     {
       field: "starred",
       headerName: "",
       width: 50,
+      sortable: false,
+      disableColumnMenu: true,
+      renderHeader: () => <StarColumnHeader />,
       renderCell: (params: any) => (
         <IconButton onClick={() => handleStarClick(params.row.id)}>
           {starredIds.includes(params.row.id) ? (
@@ -90,10 +108,10 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
         </IconButton>
       ),
     },
-    { field: "name", headerName: "Location Name", flex: 1 },
+    { field: "name", headerName: "Locations", flex: 1 },
     {
       field: "robot",
-      headerName: "Robot",
+      headerName: "Robots",
       flex: 1,
       renderCell: (params: any) => (
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -121,6 +139,11 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
       paginationMode="server"
       checkboxSelection
       disableRowSelectionOnClick
+      sx={{
+        "& .MuiDataGrid-columnHeaders": {
+          typography: "subtitle2",
+        },
+      }}
     />
   );
 };
