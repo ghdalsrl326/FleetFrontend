@@ -5,6 +5,11 @@ import StarIcon from "@mui/icons-material/Star";
 import { Location, LocationsFilter } from "types/location";
 import { useEffect, useState } from "react";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import {
+  fetchLocations,
+  fetchStarredLocationIds,
+  updateStarredLocationIds,
+} from "services/locationService";
 
 interface LocationsTableProps {
   filter: LocationsFilter;
@@ -16,42 +21,29 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
   const [starredIds, setStarredIds] = useState<number[]>([]);
   const [totalCount, setTotalCount] = useState(0);
 
-  const fetchLocations = async () => {
+  const loadLocations = async () => {
     try {
-      const searchParams = new URLSearchParams();
-      searchParams.append("page", filter.page.toString());
-      if (filter.location_name)
-        searchParams.append("location_name", filter.location_name);
-      if (filter.robot_id) searchParams.append("robot_id", filter.robot_id);
-      if (filter.is_starred) searchParams.append("is_starred", "true");
-
-      const response = await fetch(`/locations?${searchParams.toString()}`);
-      const data = await response.json();
+      const data = await fetchLocations(filter);
       setLocations(data.locations);
-      setTotalCount(data.total_count);
+      setTotalCount(data.totalCount);
     } catch (error) {
       console.error("Failed to fetch locations:", error);
     }
   };
 
-  // 최초 마운트 시에만 starred IDs를 가져옴
-  useEffect(() => {
-    const fetchStarredIds = async () => {
-      try {
-        const response = await fetch("/starred_location_ids");
-        const data = await response.json();
-        setStarredIds(data.location_ids);
-      } catch (error) {
-        console.error("Failed to fetch starred locations:", error);
-      }
-    };
-    fetchStarredIds();
-  }, []);
+  const loadStarredIds = async () => {
+    try {
+      const data = await fetchStarredLocationIds();
+      setStarredIds(data.locationIds);
+    } catch (error) {
+      console.error("Failed to fetch starred location ids:", error);
+    }
+  };
 
-  // filter 변경 시에만 locations를 가져옴
   useEffect(() => {
-    fetchLocations();
-  }, [filter.page, filter.location_name, filter.robot_id, filter.is_starred]);
+    loadStarredIds();
+    loadLocations();
+  }, [filter]);
 
   const handleStarClick = async (locationId: number) => {
     const newStarredIds = starredIds.includes(locationId)
@@ -59,14 +51,10 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
       : [...starredIds, locationId];
 
     try {
-      await fetch("/starred_location_ids", {
-        method: "PUT",
-        body: JSON.stringify(newStarredIds),
-      });
+      await updateStarredLocationIds(newStarredIds);
       setStarredIds(newStarredIds);
-      // star 상태가 변경되고 starred view인 경우에만 locations 다시 가져옴
-      if (filter.is_starred) {
-        fetchLocations();
+      if (filter.isStarred) {
+        loadLocations();
       }
     } catch (error) {
       console.error("Failed to update starred locations:", error);
@@ -98,7 +86,7 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
           <FiberManualRecordIcon
             sx={{
               fontSize: 12,
-              color: params.value.is_online ? "success.main" : "grey.500",
+              color: params.value.isOnline ? "success.main" : "grey.500",
             }}
           />
           {params.value.id}
@@ -114,13 +102,12 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
       pagination
       paginationModel={{
         page: filter.page,
-        pageSize: 15,
+        pageSize: 6,
       }}
-      pageSizeOptions={[15]}
       onPaginationModelChange={(model) => onFilterChange(model)}
       rowCount={totalCount}
       checkboxSelection
-      autoHeight
+      disableRowSelectionOnClick
     />
   );
 };
