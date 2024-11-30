@@ -4,9 +4,9 @@ import { locations } from "mocks/db";
 export const handlers = [
   http.get("/locations", ({ request }) => {
     const url = new URL(request.url);
-    const locationName = url.searchParams.get("locationName") || "";
-    const robotId = url.searchParams.get("robotId") || "";
-    const isStarred = url.searchParams.get("isStarred") === "true";
+    const locationName = url.searchParams.get("location_name") || "";
+    const robotId = url.searchParams.get("robot_id") || "";
+    const isStarred = url.searchParams.get("is_starred") === "true";
     const page = parseInt(url.searchParams.get("page") || "0");
     const pageSize = parseInt(url.searchParams.get("pageSize") || "6");
 
@@ -45,7 +45,7 @@ export const handlers = [
     });
   }),
 
-  http.get("/starredLocationIds", () => {
+  http.get("/starred_location_ids", () => {
     const starredIds = locations
       .filter((location) => location.star)
       .map((location) => location.id);
@@ -55,7 +55,7 @@ export const handlers = [
     });
   }),
 
-  http.put("/starredLocationIds", async ({ request }) => {
+  http.put("/starred_location_ids", async ({ request }) => {
     try {
       const newStarredIds = (await request.json()) as number[];
       if (!Array.isArray(newStarredIds)) {
