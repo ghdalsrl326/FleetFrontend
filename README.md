@@ -7,6 +7,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### Prerequisites
 
 - Node.js >=16.0.0 <19.0.0
+  - Recommend [nvm](https://github.com/nvm-sh/nvm) (Node Version Manager) to manage Node.js versions
 
 ### Installation
 
@@ -39,3 +40,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
      - useLocations: Manages location data fetching and star functionality
      - useDebounce: Optimizes search input performance
    - Material-UI (MUI) for UI components and theming
+
+### Note
+
+Test code was not written due to time constraints.
