@@ -30,6 +30,10 @@ const FleetDashboard = () => {
     }));
   };
 
+  const handleError = (message: string) => {
+    setError(message);
+  };
+
   return (
     <Container maxWidth="lg" sx={{ py: 10 }}>
       <Typography variant="h4" component="h1" gutterBottom>
@@ -42,13 +46,23 @@ const FleetDashboard = () => {
           onViewTypeChange={handleViewTypeChange}
         />
       </Box>
-      <LocationsTable filter={filter} onFilterChange={handleFilterChange} />
+      <LocationsTable
+        filter={filter}
+        onFilterChange={handleFilterChange}
+        onError={handleError}
+      />
       <Snackbar
         open={!!error}
         autoHideDuration={6000}
         onClose={() => setError(null)}
       >
-        <Alert severity="error">{error}</Alert>
+        <Alert
+          onClose={() => setError(null)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {error}
+        </Alert>
       </Snackbar>
     </Container>
   );

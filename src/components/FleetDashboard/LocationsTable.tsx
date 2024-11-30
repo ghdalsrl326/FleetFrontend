@@ -17,9 +17,14 @@ import {
 interface LocationsTableProps {
   filter: LocationsFilter;
   onFilterChange: (filter: Partial<LocationsFilter>) => void;
+  onError: (message: string) => void;
 }
 
-const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
+const LocationsTable = ({
+  filter,
+  onFilterChange,
+  onError,
+}: LocationsTableProps) => {
   const theme = useTheme();
 
   const [locations, setLocations] = useState<Location[]>([]);
@@ -56,12 +61,16 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
       : [...starredIds, locationId];
 
     try {
-      await updateStarredLocationIds(newStarredIds);
+      const response = await updateStarredLocationIds(newStarredIds);
+      if (response.error) {
+        throw new Error(response.error);
+      }
       setStarredIds(newStarredIds);
       if (filter.isStarred) {
         loadLocations();
       }
     } catch (error) {
+      onError("Could not star an item due to unexpected error");
       console.error("Failed to update starred locations:", error);
     }
   };
