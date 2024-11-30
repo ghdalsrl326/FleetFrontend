@@ -1,4 +1,5 @@
-import { Box, IconButton } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
@@ -6,6 +7,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import { Location, LocationsFilter } from "types/location";
 import { useEffect, useState, useCallback } from "react";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
   fetchLocations,
   fetchStarredLocationIds,
@@ -18,6 +20,8 @@ interface LocationsTableProps {
 }
 
 const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
+  const theme = useTheme();
+
   const [locations, setLocations] = useState<Location[]>([]);
   const [starredIds, setStarredIds] = useState<number[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -101,14 +105,34 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
       renderCell: (params: any) => (
         <IconButton onClick={() => handleStarClick(params.row.id)}>
           {starredIds.includes(params.row.id) ? (
-            <StarIcon color="warning" />
+            <StarIcon sx={{ color: theme.palette.notice.main }} />
           ) : (
             <StarBorderIcon />
           )}
         </IconButton>
       ),
     },
-    { field: "name", headerName: "Locations", flex: 1 },
+    {
+      field: "name",
+      headerName: "Locations",
+      flex: 1,
+      renderCell: (params: any) => (
+        <Button
+          sx={{
+            backgroundColor: params.row.robot?.isOnline
+              ? theme.palette.secondary.main
+              : theme.palette.grey[300],
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+          color="secondary"
+          variant="contained"
+          endIcon={<ChevronRightIcon />}
+        >
+          {params.value}
+        </Button>
+      ),
+    },
     {
       field: "robot",
       headerName: "Robots",
@@ -117,8 +141,10 @@ const LocationsTable = ({ filter, onFilterChange }: LocationsTableProps) => {
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <FiberManualRecordIcon
             sx={{
-              fontSize: 12,
-              color: params.value.isOnline ? "success.main" : "grey.500",
+              color: params.value.isOnline
+                ? theme.palette.success.main
+                : theme.palette.grey[500],
+              font: theme.typography.subtitle1,
             }}
           />
           {params.value.id}

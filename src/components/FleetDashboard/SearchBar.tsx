@@ -1,4 +1,11 @@
-import { Box, MenuItem, Select, TextField } from "@mui/material";
+import {
+  Box,
+  MenuItem,
+  Select,
+  TextField,
+  InputAdornment,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import { LocationsFilter } from "types/location";
 import { ChangeEvent, useState, useEffect, useRef } from "react";
 import { useDebounce } from "hooks/useDebounce";
@@ -33,12 +40,12 @@ const SearchBar = ({
   }, [debouncedSearch, onFilterChange]);
 
   return (
-    <Box sx={{ display: "flex", gap: 2 }}>
+    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
       <Select
         value={viewType}
         onChange={(e) => onViewTypeChange(e.target.value as "all" | "starred")}
         size="small"
-        sx={{ width: 200 }}
+        sx={{ width: "15%" }}
       >
         <MenuItem value="all">All Locations</MenuItem>
         <MenuItem value="starred">Starred</MenuItem>
@@ -48,7 +55,16 @@ const SearchBar = ({
         size="small"
         value={search}
         onChange={handleSearchChange}
-        sx={{ flexGrow: 1 }}
+        sx={{ width: "35%" }}
+        slotProps={{
+          input: {
+            endAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          },
+        }}
       />
     </Box>
   );
