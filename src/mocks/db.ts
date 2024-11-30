@@ -1,11 +1,4 @@
-export interface Location {
-  id: number;
-  name: string;
-  robot: {
-    id: string;
-    is_online: boolean;
-  };
-}
+import { Location } from "types/location";
 
 export const locations: Location[] = [
   // Please add more locations to show features

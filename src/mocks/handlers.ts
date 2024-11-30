@@ -1,6 +1,6 @@
 import { http, HttpResponse } from "msw";
 
-import { Location } from "./db";
+import { Location } from "types/location";
 
 interface LocationsResult {
   total_count: number;
